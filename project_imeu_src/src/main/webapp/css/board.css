@@ -1,0 +1,56 @@
+@charset "utf-8";
+
+/* 게시판 리스트 */
+.boardStyle {overflow:auto;}
+.boardStyle table {/* table-layout:fixed; word-break:break-all; */}
+.boardStyle th {text-align:center; background:#e2f8fe; border:solid 1px #cecece; color:#3c3c3c; font-size:14px; font-family:"NanumGothicBold"; height:37px; padding:0 10px;}
+.boardStyle td {text-align:center; background:#fff; border:solid 1px #cecece; height:31px; padding:0 10px;}
+.boardStyle th.first {border-left:none;}
+.boardStyle td.first {border-left:none;}
+.boardStyle th.last {border-right:none;}
+.boardStyle td.last {border-right:none;}
+.boardStyle .first td {color:#555; font-family:"NanumGothicBold"; background:#d7e8ed; background:linear-gradient(to bottom, #fff, #c3dee5);}
+.boardStyle tbody tr .saturday {background:#eef1fc; /* background: linear-gradient(to bottom, #eef1fc, #c8d0ea); */}
+.boardStyle tbody tr .sunday {background:#f7e3e3; /* background: linear-gradient(to bottom, #fbeeee, #f2cbcb); */}
+.boardStyle tbody td.rowOverIn {background:#e7ecf3;}
+.boardStyle tbody td.colOverIn {background:#e7ecf3;}
+.boardStyle tbody td.tdOverIn {background:#e7ecf3;}
+.boardStyle tbody td.rowToggleIn, .boardStyle tbody td.colToggleIn, .boardStyle tbody td.tdToggleIn {
+ font-family:"NanumGothicBold"; background:#b7d4dc; color:#000;}
+.boardStyle .a td {background:#f3f3f3;}
+
+/* 페이징 */
+.paging {text-align:center; padding:30px 0;}
+.paging li {display:inline;}
+.paging li a {display:inline-block; padding:3px;}
+.paging li a img {vertical-align:middle;}
+.paging li strong {display:inline-block; padding:3px; color:#2fb4ba; font-family:"NanumGothicBold"; }
+
+/* 게시판 쓰기 */
+.boardWriting {font-size:13px;}
+.boardWriting th {height:28px; padding-left:14px; font-family:"NanumGothicBold";}
+.boardWriting td {height:28px;}
+.boardWriting td input.text {width:100%; height:22px; border:solid 1px #c8c8c8;}
+.boardWriting td input.text:focus {border:1px solid #777;}
+.boardWriting td input.text:hover {border:1px solid #777;}
+.boardWriting td label {padding-left:5px; padding-right:10px;}
+
+/* 버튼 영역 */
+.btnArea {text-align:center; padding-top:20px;}
+.btnArea li {display:inline;}
+.btnArea li a {display:inline-block; width:85px; height:37px; line-height:37px; text-align:center; background:url(../images/common/bg_btn.gif) 0 0 no-repeat; color:#fff; font-family:"NanumGothicBold"; font-size:15px; margin:0 2px;}
+.btnArea li.color a{background:url(../images/common/bg_btn_active.gif) 0 0 no-repeat;}
+
+/* 상단 검색 영역 */
+.searchArea {height:50px; line-height:50px; background:#f2f2f2; margin-bottom:20px; padding-left:16px; font-size:14px;}
+.searchArea .pdl {padding-left:60px;}
+.searchArea .text {width:120px; height:22px; line-height:22px; border:1px solid #6dc6dd; border-radius:3px; padding:0 5px;}
+.searchArea .text:hover {border:1px solid #4e9aae;}
+.searchArea .text:focus {border:1px solid #4e9aae;}
+.searchArea select {padding:0 0 0 3px; height:24px; line-height:24px; border:1px solid #6dc6dd; border-radius:3px; width:120px;}
+.searchArea select:hover {border:1px solid #4e9aae;}
+.searchArea select:focus {border:1px solid #4e9aae;}
+.searchArea span {padding:0 5px 0 10px; font-family:"NanumGothicBold";}
+.searchArea span.pdl {padding-left:30px;}
+.searchArea span.pdl2 {padding-left:10px; padding-right:2px;}
+.searchArea img {vertical-align:middle;}

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:util="http://www.springframework.org/schema/util"
+xmlns:aop="http://www.springframework.org/schema/aop" 
+xmlns:tx="http://www.springframework.org/schema/tx"
+xmlns:task="http://www.springframework.org/schema/task"
+xsi:schemaLocation="http://www.springframework.org/schema/beans 
+http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/tx
+http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-3.2.xsd
+http://www.springframework.org/schema/util
+http://www.springframework.org/schema/util/spring-util-3.2.xsd
+http://www.springframework.org/schema/task
+http://www.springframework.org/schema/task/spring-task-3.0.xsd
+http://www.springframework.org/schema/aop 
+http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+		
+	
+	<!-- properties -->
+	<util:properties id="configs" location="classpath:imeu.properties" />
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="properties" ref="configs" />
+		<property name="location" value="classpath:imeu.properties" />
+	</bean>
+	<!-- properties -->
+	
+	<!-- db -->
+	<!-- config -->
+ 	<bean id="dataSourceSpied" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" 	value="${jdbc.driverClassName}" />
+		<property name="url" 				value="${jdbc.url}" />
+		<property name="username" 			value="${jdbc.username}" />
+		<property name="password" 			value="${jdbc.password}" />
+		<property name="initialSize" 		value="${jdbc.initialSize}" />
+		<property name="maxActive" 			value="${jdbc.maxActive}" />
+		<property name="maxIdle" 			value="${jdbc.maxIdle}" />
+		<property name="minIdle"			value="${jdbc.minIdle}" />
+		<property name="removeAbandoned" 	value="${jdbc.removeAbandoned}" />
+		<property name="removeAbandonedTimeout" value="${jdbc.removeAbandonedTimeout}" />
+		<property name="testOnBorrow"		value="${jdbc.testOnBorrow}" />
+		<property name="logAbandoned" 		value="${jdbc.logAbandoned}" />
+		<property name="validationQuery" 	value="${jdbc.validationQuery}" />
+		<property name="defaultAutoCommit"  value="${jdbc.defaultAutoCommit}" />
+ 	</bean>
+    
+	<bean id="dataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
+        <constructor-arg ref="dataSourceSpied" />
+        <property name="logFormatter">
+            <bean class="net.sf.log4jdbc.tools.Log4JdbcCustomFormatter">
+                <property name="loggingType" value="MULTI_LINE" />
+                <property name="sqlPrefix" value=" SQL : "/>
+            </bean>
+        </property>
+	</bean>	
+ 	<!-- config -->	
+ 	
+	<!-- transaction -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<!-- <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" /> -->
+	<!-- transaction --> 	
+
+	<!-- session -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="mapperLocations" value="classpath:kr/co/imeu/sql/*/*.xml" />
+	</bean>
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<qualifier value="sqlSession" />
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="sqlSessionBatch" class="org.mybatis.spring.SqlSessionTemplate">
+		<qualifier value="sqlSessionBatch" />
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+		<constructor-arg index="1" value="BATCH" />
+	</bean>
+	<!-- session -->
+	
+	<!-- db -->
+	<aop:config proxy-target-class="true">
+		<aop:pointcut id="txAdvisePointCut" expression="execution(public * kr.co.imeu.service.*Service.*(..))"/>
+		<aop:advisor id="transactionAdvisor" pointcut-ref="txAdvisePointCut" advice-ref="txAdvice"/>
+	</aop:config>
+
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="get*" read-only="true" />
+			<tx:method name="find*" read-only="true" />
+			<tx:method name="insert*" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="update*" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="delete*" propagation="REQUIRED" rollback-for="Exception"/>
+		</tx:attributes>
+	</tx:advice>
+	<!-- db -->
+	
+	<!-- Mail -->
+	<!-- Mail -->
+
+    
+	<!-- scheduler -->
+	<task:scheduler id="myScheduler" pool-size="10" />
+	<task:executor id="myExecutor" pool-size="10" />
+	<task:annotation-driven executor="myExecutor" scheduler="myScheduler" />
+</beans>
